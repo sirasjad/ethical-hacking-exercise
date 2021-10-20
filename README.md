@@ -9,9 +9,20 @@ The goal of this exercise is to gain root access to a Linux server with no prior
 ### Step 1 - Prepare virtual machines
 The host machine is running an instance of Kali Linux on a virtual machine and the target/victim is a Ubuntu server, which is also running on a separate virtual machine on the same network as host. 
 
-![image](https://user-images.githubusercontent.com/8083228/138131002-ba2368a6-bd5d-4f2e-82a8-edb4458b2405.png)
-
-
+![VirtualBox environment](https://user-images.githubusercontent.com/8083228/138131002-ba2368a6-bd5d-4f2e-82a8-edb4458b2405.png)
 
 ### Step 2 - Inspect attack surfaces on target machine
 Hei
+
+I started the exercise by identifying my own IP address. The host and target machines are running on a closed network, so it should be easy to identify the target IP address. Simply running `ifconfig` shows that my local IP address is `192.168.99.100`. 
+
+![Identifying my own IP address](https://user-images.githubusercontent.com/8083228/138134863-ae69e3fb-ebf7-457c-84dd-177c4f0306ef.png)
+
+The next step is to identify the target IP address. One approach is to scan the network range using `nmap`, which discovers all connected hosts and services on the network. Now I know that the target IP address is `192.168.99.101`. 
+
+![Identifying target IP address](https://user-images.githubusercontent.com/8083228/138136615-0c6ce3c2-bca2-469f-9b1a-388d1744a293.png)
+
+I also initiated a port scan on the target IP address in order to identify open network ports. Using `nmap` for port scanning, I know that there are three open ports on the target machine: `80` (http), `21` (ftp) and `22` (ssh). By making a wild guess I can assume that the target is a webserver. 
+
+![Port scanning](https://user-images.githubusercontent.com/8083228/138137931-eed274b6-479e-4f08-b8e3-5003ede367ab.png)
+
