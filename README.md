@@ -65,4 +65,37 @@ I found a SQL table consisting of FTP login information and this was my second e
 
 ![image](https://user-images.githubusercontent.com/8083228/138156552-b5fe987b-81ce-4838-baea-ee8f1477341c.png)
 
-I tried to login through FTP with the given username `johnny` and password `s1lverh4nd`, and surprisingly it worked.
+### Step 4 - FTP login
+I tried to login using FTP with the given username `johnny` and password `s1lverh4nd`, and surprisingly it worked. At this point I had access to the server files through FTP and I was able to navigate around. I downloaded the server files to my local machine as a backup using `wget`, and then I disconnected from the server. 
+
+![image](https://user-images.githubusercontent.com/8083228/138161326-6729b53c-a867-4425-8040-d28ab7e1db91.png)
+
+At this point I had a full backup of the server files on my local machine and I could safely navigate around without worrying about leaving any traces or activity logs on the server.
+
+![image](https://user-images.githubusercontent.com/8083228/138162483-abac8770-ee15-4aa7-8d4e-62b299848a31.png)
+
+Then I examined the different directories and found a `.ssh` directory consisting of some SSH configuration files, including a private RSA encryption key! This was a major step to actually break into the server, as this private key is used for authentication and secure login to the server. 
+
+![image](https://user-images.githubusercontent.com/8083228/138163276-78be8dd5-def1-4565-9c1e-5d8e5149a017.png)
+
+I examined the `authorized_keys` file to see which user the private key belongs to, and at this point I had everything I needed to actually log into the server (or at least attempt to login). 
+
+![image](https://user-images.githubusercontent.com/8083228/138164296-44edf054-4b10-478b-b541-7c29210fd61e.png)
+
+### Step 5 - SSH login
+The next step was to actually log into the server using SSH, and this was possible by using the private SSH key stored in `id_rsa`. I also had to change the file permissions using `chmod 600 id_rsa`, since the server was warning me about an unprotected private key file. After setting the file permissions, I was able to  log into the server and I officially had access to a shell! 
+
+![image](https://user-images.githubusercontent.com/8083228/138165087-824b5e52-b80a-455b-b4e7-2c86daa5f3b6.png)
+
+### Step 6 - Getting root access
+Even though I had shell access at this point, I did not have root permissions on the server (which is the goal of this exercise). The next step was obviously to get root permissions, so that I could access all files and initiate all root commands on the server. I tried to read the `/etc/sudoers` file, but did not have sufficient permissions to access this file.
+
+![image](https://user-images.githubusercontent.com/8083228/138166786-89c7b683-1851-410a-b70d-71d1c0a31d6a.png)
+
+The current user permissions were limited and I was unable to use every `sudo` command I tried. However in some cases there are some specific sudo commands that are enabled for non-root users, and this was something I had to investigate. I used the commands `find / -perm -u=s -type f 2>/dev/null` and `sudo -l` to identify which sudo commands my user account had access to as a non-root user. 
+
+![image](https://user-images.githubusercontent.com/8083228/138168178-c21d40a0-9e60-403d-a238-5a6ac302398b.png)
+
+Bingo! I noticed that my user account could run `tedit` with root privileges and this was my entrance ticket to the `/etc/sudoers` file. Tedit is a text editor (alternative to `vim` and `nano`) and was perfect for my use case. 
+
+![image](https://user-images.githubusercontent.com/8083228/138169116-3140f94f-5d77-40ba-8f41-410412f2780e.png)
