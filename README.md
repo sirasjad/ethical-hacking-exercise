@@ -48,11 +48,21 @@ Proceeding from the `Proxy` tab in Burpsuite, I enabled `Intercept mode` to insp
 
 ![image](https://user-images.githubusercontent.com/8083228/138150817-805ef730-7988-4ad5-82f8-160369c54b45.png)
 
-I was able to change the `id` body parameter with different values and retrieve different information from the database. At this point I was confident that the POST attribute could be exploited using various attack vectors (such as SQL injection), and that is exactly what I proceeded with.
+I was able to change the `id` body parameter with different values and retrieve different information from the database. At this point I had confirmed at least one potential attack surface and I was confident that the POST attribute could be exploited using various attack vectors (such as SQL injection), and that is exactly what I proceeded with.
 
 ![image](https://user-images.githubusercontent.com/8083228/138151419-8cd8ebc0-f33c-4206-ae03-033e5302633e.png)
 
-
-At this point I had confirmed at least one attack surface.
-
 ### Step 3 - Initiate a SQL injection
+A simple SQL injection trick is to append `OR 1=1` to the POST attribute and see how the database handles this parameter. The web server returned all rows from the database table and displayed all this information, instead of just one row related to one specific ID. I just found a major vulnerability in the web application and this was my entrance ticket to exploit the web server. At this point I had confirmed that the SQL implementation was insecure and it could be exploited by SQL injections. 
+
+![image](https://user-images.githubusercontent.com/8083228/138153174-ad89f170-bd8e-4746-84c1-6d520f10b4f0.png)
+
+Then I disabled `Intercept mode` in Burpsuite and switched to SQLMap, which automates the process of SQL injection by tampering the input attributes with a pre-defined payload existing of invalid and malicious characters. I exported the raw POST request to a file and imported this dump file in SQLMap. By simply running `sqlmap -r export.req -- dump` I was able to initiate a SQL injection attack and the penetration tool successfully exploited and retrieved data from the database. The results were exported to a log file and the SQL injection process was complete.
+
+![image](https://user-images.githubusercontent.com/8083228/138155830-a62f810a-84e7-47d8-9b4d-3e7171df9103.png)
+
+I found a SQL table consisting of FTP login information and this was my second entrance ticket to gain shell access. 
+
+![image](https://user-images.githubusercontent.com/8083228/138156552-b5fe987b-81ce-4838-baea-ee8f1477341c.png)
+
+I tried to login through FTP with the given username `johnny` and password `s1lverh4nd`, and surprisingly it worked.
