@@ -11,3 +11,6 @@ The host machine is running an instance of Kali Linux on a virtual machine and t
 
 ### Step 2 - Inspect attack surfaces on target machine
 Hei
+
+Test image
+![image](https://user-images.githubusercontent.com/8083228/138128355-09c0bed0-8dc1-4093-914a-21fb196966a1.png)
