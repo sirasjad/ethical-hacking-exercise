@@ -28,3 +28,31 @@ Following my instincts, I tried to access the IP address from a web browser to c
 
 ![image](https://user-images.githubusercontent.com/8083228/138142857-e8fc789f-e04e-4d3c-a9f1-2fc1db6e7db8.png)
 
+Since the index page had no actual purpose (it only displayed an image), I naturally expect some hidden clues behind the scenes. Using `dirb`, which is a penetration tool used for web content scanning, I was able to scan the web server for sub-directories and hidden files. I found two sub-directories: `/server-status` and `/review/index.php`. 
+
+![image](https://user-images.githubusercontent.com/8083228/138144585-5073f649-90a6-416e-81eb-3ebc50c04d93.png)
+
+The first sub-directory did not work and I was unable to access this page. The second sub-directory worked fine and it appears to be an interactive review forum for this Cyberpunk video game. (I obviously had some fun injecting garbage values to identify potential attack surfaces before this screenshot, hence the random entries on this page).
+
+![image](https://user-images.githubusercontent.com/8083228/138146444-3c20fcf8-3c32-4f18-b09c-77d0157127af.png)
+
+Playing around with the different web pages, I noticed that the `viewcomment.php` page is using POST to request and retrieve information from an external source, which most likely is a database or an API. 
+
+![image](https://user-images.githubusercontent.com/8083228/138147468-59b69976-44cd-4bcb-96f2-4977c626d055.png)
+
+Then I launched Burpsuite for further inspection of this web application and to identify specific attack surfaces by URL tampering and attempting SQL injection. I had to enable manual proxy in my web browser in order to forward all traffic to Burpsuite. 
+
+![image](https://user-images.githubusercontent.com/8083228/138149469-a2b32e96-3d65-4c39-a214-f0b1c69d0d6a.png)
+
+Proceeding from the `Proxy` tab in Burpsuite, I enabled `Intercept mode` to inspect the network traffic and found a POST `id` attribute, which is forwarded to the SQL database. By sending this message to the `Repeater` in Burpsuite, I was able to simulate this traffic and play around with the `id` attribute to examine how the web server reacts to my random entries. 
+
+![image](https://user-images.githubusercontent.com/8083228/138150817-805ef730-7988-4ad5-82f8-160369c54b45.png)
+
+I was able to change the `id` body parameter with different values and retrieve different information from the database. At this point I was confident that the POST attribute could be exploited using various attack vectors (such as SQL injection), and that is exactly what I proceeded with.
+
+![image](https://user-images.githubusercontent.com/8083228/138151419-8cd8ebc0-f33c-4206-ae03-033e5302633e.png)
+
+
+At this point I had confirmed at least one attack surface.
+
+### Step 3 - Initiate a SQL injection
