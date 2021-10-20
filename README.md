@@ -1,5 +1,5 @@
 # Ethical Hacking Exercise
-Course: IN5290 - Ethical Hacking (UiO) <br>
+Course: IN5290 - Ethical Hacking (UiO) \
 Semester: Autumn 2021
 
 ## Objective
