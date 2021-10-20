@@ -108,8 +108,8 @@ And that's it! At this point I officially had root shell access on the server an
 
 ![image](https://user-images.githubusercontent.com/8083228/138170972-9da27d05-9725-4e42-b4e7-27b6c4c5bbb7.png)
 
-### Step 7 - Reading /root/flag.txt
-And then it was time to complete the final step of this exercise: access the `/root` directory and read the `flag.txt` file. I was able to complete this step without any issues, as I already had root shell privileges at this point. 
+### Step 7 - Reading the /root/flag.txt file
+Finally it was time to complete the last step of this exercise: access the `/root` directory and read the `flag.txt` file. I was able to complete this step without any issues, as I already had root shell privileges at this point. 
 
 ![image](https://user-images.githubusercontent.com/8083228/138171400-f1f640de-56ee-4448-b751-3a2f92d1a79d.png)
 
